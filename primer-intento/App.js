@@ -24,7 +24,6 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import pcarga from "./assets/pantallacarga.png";
 import Menu from "./menu";
 import { FontAwesome } from '@expo/vector-icons'; 
-
 const fetchData = async () => {
   const url = "http://192.168.195.147:8000/api/reciclaje";
   try {
@@ -51,7 +50,32 @@ export default class App extends Component {
       longitude: null,
       loading: true,
       showMenu: false,
-      datainBackend: [],
+      datainBackend: [
+        {
+            "id": 1,
+            "nombre_empresa": "Reciclamaniaco",
+            "descripcion": "Empresa de venta de material reciclable",
+            "horarios": "de 8:00 AM a 5:00 PM de lunes a viernes",
+            "lat": -17.385855997214254,
+            "long": -66.17990278650495
+        },
+        {
+            "id": 2,
+            "nombre_empresa": "Metal Tuyo",
+            "descripcion": "Metal Tuyo es una empresa dedicada a la recuperación y reciclaje de metales ferrosos y no ferrosos en desuso, a la compra de cobre, bronce, aluminio, acero inoxidable, latas de aluminio, radiadores, ollas, baterías y chatarra en general, por kg y por toneladas. Nuestro compromiso con la naturaleza nos mueve a brindar la mejor experiencia a nuestros clientes, para que la recepción, pesaje y pago justo por los materiales acopiados se conviertan en una actividad permanente. Metal Tuyo tiene un centro de acopio mayorista ubicado en la Av. Villazon, Km 1, antes del primer puente, en la parte de posterior de la tienda de camiones “Mundo Automotor”. También cuenta con un servicio de recojo a domicilio o en el punto de entrega donde el cliente tenga el material acopiado.",
+            "horarios": "De lunes a viernes de 8:00 a 12:00 y de 14:00 A 18:00 Y Sabado de 09:00 a 13:00",
+            "lat": -17.373405654233448,
+            "long": -66.1323429427175
+        },
+        {
+            "id": 3,
+            "nombre_empresa": "Recicladora Salvatierra",
+            "descripcion": "RECICLADORA, ACOPIADORA DE METALES FERROSOS Y NO FERROSOS.",
+            "horarios": "de lunes a viernes de 08:00 a 18:00 y sabados de 08:00 a 16:00",
+            "lat": -17.399607731361627,
+            "long": -66.20215760265259
+        }
+    ],
       modalVisible: false,
       selectedMarker: null,
     };
@@ -81,12 +105,12 @@ export default class App extends Component {
   async componentDidMount() {
     // await request_location();    console.log(coords)
     let coords = await getLocation();
-    const data = await fetchData();
+    // const data = await fetchData();
     this.setState({
       latitude: coords[0],
       longitude: coords[1],
       loading: false,
-      datainBackend: data,
+      // datainBackend: data,
     });
     // console.log(this.state);
   }
