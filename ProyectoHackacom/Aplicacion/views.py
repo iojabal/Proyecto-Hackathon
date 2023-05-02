@@ -41,7 +41,7 @@ def contaminacionaire_api_view(request):
 def noticia_detail_api_view(request,id):
     if request.method == 'GET':
         noti=Noticia.objects.get(id=int(id))
-        serializer = NoticiasSerializer(noti, many=True)
+        serializer = NoticiasSerializer(noti, many=False)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
 @api_view(['POST'])

@@ -23,12 +23,14 @@ import { Entypo } from "@expo/vector-icons";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import pcarga from "./assets/pantallacarga.png";
 import Menu from "./menu";
+import { FontAwesome } from '@expo/vector-icons'; 
 
 const fetchData = async () => {
-  const url = "http://192.168.195.135:8000/api/reciclaje";
+  const url = "http://192.168.195.147:8000/api/reciclaje";
   try {
     const response = await fetch(url);
     if (!response.ok) {
+      console.log(response.status)
       throw new Error("Network response was not ok");
     }
     const data = await response.json();
@@ -49,13 +51,7 @@ export default class App extends Component {
       longitude: null,
       loading: true,
       showMenu: false,
-      datainBackend: [{
-        nombre_empresa: "Recicladora SRL",
-        descripcion: "test 123,123123123",
-        horarios: "8am - 9pm horario continuo",
-        lat: -17.385855997214254,
-        long:  -66.17990278650495
-      }],
+      datainBackend: [],
       modalVisible: false,
       selectedMarker: null,
     };
@@ -85,14 +81,14 @@ export default class App extends Component {
   async componentDidMount() {
     // await request_location();    console.log(coords)
     let coords = await getLocation();
-    // const data = await fetchData();
+    const data = await fetchData();
     this.setState({
       latitude: coords[0],
       longitude: coords[1],
       loading: false,
-      // datainBackend: data,
+      datainBackend: data,
     });
-    console.log(this.state);
+    // console.log(this.state);
   }
   render() {
     // console.log("New");
@@ -128,6 +124,7 @@ export default class App extends Component {
               }}
               onPress={(event) => this.onMarkerPress(event, mark)}
             >
+              <FontAwesome name="recycle" size={24} color="black" />
               <Callout>
                 <View style={styles.calloutMarkers}>
                   <Text style={{ fontWeight: "bold", fontSize: 16 }}>
