@@ -49,7 +49,13 @@ export default class App extends Component {
       longitude: null,
       loading: true,
       showMenu: false,
-      datainBackend: [],
+      datainBackend: [{
+        nombre_empresa: "Recicladora SRL",
+        descripcion: "test 123,123123123",
+        horarios: "8am - 9pm horario continuo",
+        lat: -17.385855997214254,
+        long:  -66.17990278650495
+      }],
       modalVisible: false,
       selectedMarker: null,
     };
@@ -79,12 +85,12 @@ export default class App extends Component {
   async componentDidMount() {
     // await request_location();    console.log(coords)
     let coords = await getLocation();
-    const data = await fetchData();
+    // const data = await fetchData();
     this.setState({
       latitude: coords[0],
       longitude: coords[1],
       loading: false,
-      datainBackend: data,
+      // datainBackend: data,
     });
     console.log(this.state);
   }
