@@ -124,7 +124,7 @@ export default class App extends Component {
               }}
               onPress={(event) => this.onMarkerPress(event, mark)}
             >
-              <FontAwesome name="recycle" size={24} color="black" />
+              <FontAwesome name="recycle" size={24} color="green" />
               <Callout>
                 <View style={styles.calloutMarkers}>
                   <Text style={{ fontWeight: "bold", fontSize: 16 }}>
