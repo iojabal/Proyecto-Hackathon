@@ -11,12 +11,35 @@ import {
   TouchableOpacity,
   TextInput,
 } from "react-native";
-import MapView, { UrlTile, PROVIDER_DEFAULT } from "react-native-maps";
+import MapView, {
+  UrlTile,
+  PROVIDER_DEFAULT,
+  Marker,
+  MarkerAnimated,
+  Callout,
+} from "react-native-maps";
 import getLocation from "./getLocation";
 import { Entypo } from "@expo/vector-icons";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import pcarga from './assets/pantallacarga.png'
-import Menu from './menu'
+import pcarga from "./assets/pantallacarga.png";
+import Menu from "./menu";
+
+const fetchData = async () => {
+  const url = "http://192.168.195.135:8000/api/reciclaje";
+  try {
+    const response = await fetch(url);
+    if (!response.ok) {
+      throw new Error("Network response was not ok");
+    }
+    const data = await response.json();
+    console.log(data);
+    return data;
+  } catch (error) {
+    console.error(error);
+    // Manejo del error
+    return null;
+  }
+};
 
 export default class App extends Component {
   constructor(props) {
@@ -25,16 +48,24 @@ export default class App extends Component {
       latitude: null,
       longitude: null,
       loading: true,
-      showMenu: false
+      showMenu: false,
+      datainBackend: [],
+      modalVisible: false,
+      selectedMarker: null,
     };
     this.mapRef = React.createRef();
+    this.refs = this.state.datainBackend.map(() => React.createRef());
   }
 
-  toggleMenu= () =>{
+  toggleMenu = () => {
     this.setState({
       showMenu: !this.state.showMenu,
     });
-  }
+  };
+
+  onMarkerPress = (even, marker) => {
+    this.setState({ selectedMarker: marker, modalVisible: true });
+  };
 
   handleCenterMap = () => {
     this.mapRef.current.animateToRegion({
@@ -48,20 +79,22 @@ export default class App extends Component {
   async componentDidMount() {
     // await request_location();    console.log(coords)
     let coords = await getLocation();
+    const data = await fetchData();
     this.setState({
       latitude: coords[0],
       longitude: coords[1],
       loading: false,
+      datainBackend: data,
     });
-    // console.log(typeof this.state)
+    console.log(this.state);
   }
   render() {
-    console.log("New");
-    console.log(this.state);
+    // console.log("New");
+    // console.log(this.state.datainBackend);
     if (this.state.loading) {
       return (
         <View style={styles.container}>
-          <Image source={pcarga} style={styles.image}/>
+          <Image source={pcarga} style={styles.image} />
         </View>
       );
     }
@@ -80,6 +113,29 @@ export default class App extends Component {
             longitudeDelta: 0.0421,
           }}
         >
+          {this.state.datainBackend.map((mark, index) => (
+            <Marker
+              key={index}
+              coordinate={{
+                latitude: mark.lat,
+                longitude: mark.long,
+              }}
+              onPress={(event) => this.onMarkerPress(event, mark)}
+            >
+              <Callout>
+                <View style={styles.calloutMarkers}>
+                  <Text style={{ fontWeight: "bold", fontSize: 16 }}>
+                    Nombre:
+                  </Text>
+                  <Text>{mark.nombre_empresa}</Text>
+                  <Text style={{ fontWeight: "bold", fontSize: 16 }}>Descripción:</Text>
+                  <Text>{mark.descripcion}</Text>
+                  <Text style={{fontWeight: 'bold', fontSize: 16}}>Horarios:</Text>
+                  <Text>{mark.horarios}</Text>
+                </View>
+              </Callout>
+            </Marker>
+          ))}
           <UrlTile
             urlTemplate="http://a.tile.openstreetmap.org/{z}/{x}/{y}.png"
             maximumZ={19}
@@ -93,11 +149,14 @@ export default class App extends Component {
         </View>
         {this.state.showMenu ? (
           <View style={styles.menuContainer}>
-            <Menu/>
-        </View>
-        ): null}
+            <Menu />
+          </View>
+        ) : null}
         <View style={styles.buttonBottom}>
-          <TouchableOpacity style={styles.button} onPress={this.handleCenterMap}>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={this.handleCenterMap}
+          >
             <MaterialCommunityIcons
               name="crosshairs-gps"
               size={24}
@@ -114,15 +173,15 @@ export default class App extends Component {
 }
 
 const styles = StyleSheet.create({
-  image:{
+  image: {
     width: 400,
-    height: 200
+    height: 200,
   },
   container: {
     ...StyleSheet.absoluteFillObject,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: '#72cad9'
+    backgroundColor: "#72cad9",
   },
   map: {
     ...StyleSheet.absoluteFillObject,
@@ -171,5 +230,9 @@ const styles = StyleSheet.create({
     width: "100%",
     paddingHorizontal: 20,
     alignItems: "center",
+  },
+  calloutMarkers: {
+    width: 200,
+    height: 200,
   },
 });

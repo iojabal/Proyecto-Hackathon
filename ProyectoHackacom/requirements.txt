@@ -1,0 +1,8 @@
+Django==4.1.7
+PyJWT
+djangorestframework
+psycopg2
+django-jazzmin
+pydub
+numpy
+scipy
