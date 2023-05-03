@@ -1,13 +1,8 @@
 import React, { Component, useEffect, useState } from "react";
 import {
-  StyleSheet,
   View,
   Text,
   Image,
-  PermissionsAndroid,
-  Alert,
-  ActivityIndicator,
-  Button,
   TouchableOpacity,
   TextInput,
 } from "react-native";
@@ -15,7 +10,6 @@ import MapView, {
   UrlTile,
   PROVIDER_DEFAULT,
   Marker,
-  MarkerAnimated,
   Callout,
 } from "react-native-maps";
 import getLocation from "./getLocation";
@@ -24,6 +18,9 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import pcarga from "./assets/pantallacarga.png";
 import Menu from "./menu";
 import { FontAwesome } from '@expo/vector-icons'; 
+import styles from './styles'
+
+
 const fetchData = async () => {
   const url = "http://192.168.195.147:8000/api/reciclaje";
   try {
@@ -199,67 +196,3 @@ export default class App extends Component {
   }
 }
 
-const styles = StyleSheet.create({
-  image: {
-    width: 400,
-    height: 200,
-  },
-  container: {
-    ...StyleSheet.absoluteFillObject,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#72cad9",
-  },
-  map: {
-    ...StyleSheet.absoluteFillObject,
-  },
-  text: {
-    fontSize: 50,
-  },
-  buttonContainer: {
-    position: "absolute",
-    top: 20,
-    left: 10,
-    width: 50,
-    height: 50,
-    borderRadius: 50,
-  },
-  button: {
-    width: 60,
-    height: 50,
-    borderRadius: 10,
-    overflow: "hidden", // Esto es para que los bordes redondeados se apliquen correctamente
-    backgroundColor: "#014224",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  buttonBottom: {
-    position: "absolute",
-    bottom: 20,
-    right: 20,
-    width: 50,
-    height: 50,
-    borderRadius: 80,
-  },
-  input: {
-    width: "90%",
-    height: 50,
-    borderColor: "gray",
-    borderWidth: 1,
-    padding: 10,
-    backgroundColor: "#f6f7f7",
-    borderRadius: 12,
-  },
-  inputContainer: {
-    position: "absolute",
-    top: 20,
-    left: 35,
-    width: "100%",
-    paddingHorizontal: 20,
-    alignItems: "center",
-  },
-  calloutMarkers: {
-    width: 200,
-    height: 200,
-  },
-});
